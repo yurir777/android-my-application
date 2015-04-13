@@ -58,7 +58,7 @@ public class MyActivity extends Activity {
 
     public void openSearch() {
         //Do something here.
-        //startActivity(new Intent(Settings..ACTION_SEARCH_SETTINGS));
+        startActivity(new Intent(Settings.ACTION_SEARCH_SETTINGS));
     }
 
     public void openSettings() {
