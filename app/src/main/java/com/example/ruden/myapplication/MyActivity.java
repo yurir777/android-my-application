@@ -1,5 +1,6 @@
 package com.example.ruden.myapplication;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,6 +19,11 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        ActionBar ab =getActionBar();
+        if (ab != null) {
+            ab.setDisplayShowHomeEnabled(true);
+        }
+
     }
 
 
@@ -56,12 +62,12 @@ public class MyActivity extends Activity {
         startActivity(intent);
     }
 
-    public void openSearch() {
+    private void openSearch() {
         //Do something here.
         startActivity(new Intent(Settings.ACTION_SEARCH_SETTINGS));
     }
 
-    public void openSettings() {
+    private void openSettings() {
         //Do something here.
         startActivity(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
     }

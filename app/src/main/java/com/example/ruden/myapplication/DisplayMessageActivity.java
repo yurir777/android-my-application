@@ -1,5 +1,6 @@
 package com.example.ruden.myapplication;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,7 +19,10 @@ public class DisplayMessageActivity extends Activity {
         textView.setTextSize(40);
         textView.setText(message);
         setContentView(textView);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar ab =getActionBar();
+        if (ab != null) {
+            ab.setDisplayShowHomeEnabled(true);
+        }
     }
 
     @Override
