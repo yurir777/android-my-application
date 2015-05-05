@@ -23,7 +23,6 @@ public class MyActivity extends Activity {
         if (ab != null) {
             ab.setDisplayShowHomeEnabled(true);
         }
-
     }
 
 
