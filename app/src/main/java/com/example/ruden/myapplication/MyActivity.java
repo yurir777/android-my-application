@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 
 public class MyActivity extends Activity {
@@ -19,15 +20,18 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        ActionBar ab =getActionBar();
+        ActionBar ab = getActionBar();
         if (ab != null) {
             ab.setDisplayShowHomeEnabled(true);
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        ActionBar ab = getActionBar();
+        if (ab != null) {
+            ab.setTitle(" " + ab.getTitle());
+        }
         // Inflate the menu items for use in the action bar.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_my, menu);
