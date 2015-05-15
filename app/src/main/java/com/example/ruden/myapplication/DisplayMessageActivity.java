@@ -22,6 +22,7 @@ public class DisplayMessageActivity extends Activity {
         ActionBar ab =getActionBar();
         if (ab != null) {
             ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
     }
 
