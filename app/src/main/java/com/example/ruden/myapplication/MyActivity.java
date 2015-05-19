@@ -3,6 +3,7 @@ package com.example.ruden.myapplication;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
@@ -11,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 public class MyActivity extends Activity {
     public final static String EXTRA_MESSAGE = "com.example.ruden.myapplication.MESSAGE";
+    public final static String SAVED_MESSAGE_KEY = "com.example.ruden.myapplication.SAVED_MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,29 @@ public class MyActivity extends Activity {
         if (ab != null) {
             ab.setDisplayShowHomeEnabled(true);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        String message = editText.getText().toString();
+        if (message.isEmpty()) {
+            SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
+            String savedMessage = prefs.getString(SAVED_MESSAGE_KEY, "");
+            editText.setText(savedMessage, TextView.BufferType.EDITABLE);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        String message = editText.getText().toString();
+        SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(SAVED_MESSAGE_KEY, message);
+        editor.commit();
     }
 
     @Override
