@@ -100,4 +100,9 @@ public class MyActivity extends Activity {
         //Do something here.
         startActivity(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
     }
+
+    /** Called when the user clicks the Add Contact button */
+    public void addContact(View view) {
+    }
+
 }
