@@ -1,23 +1,31 @@
 package com.example.ruden.myapplication;
 
 import android.app.ActionBar;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 public class MyActivity extends Activity {
     public final static String EXTRA_MESSAGE = "com.example.ruden.myapplication.MESSAGE";
     public final static String SAVED_MESSAGE_KEY = "com.example.ruden.myapplication.SAVED_MESSAGE";
+    public static final int PICK_CONTACT_REQUEST = 1;  // The request code
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +111,54 @@ public class MyActivity extends Activity {
 
     /** Called when the user clicks the Add Contact button */
     public void addContact(View view) {
+        Intent pickContactIntent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+        //pickContactIntent.setType(Email.CONTENT_TYPE); // Show user only contacts with email
+        startActivityForResult(pickContactIntent, PICK_CONTACT_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == PICK_CONTACT_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Uri contactUri = data.getData(); // has the uri for picked contact
+                String id = contactUri.getLastPathSegment();
+                ContentResolver resolver = getContentResolver();
+                String name = "", phone = "", email = "";
+
+                Cursor contactCursor = resolver.query(contactUri, null, null, null, null);
+                if (contactCursor.moveToFirst()) {
+                    name = contactCursor.getString(contactCursor.getColumnIndex(Contacts.DISPLAY_NAME));
+                }
+
+                Cursor phoneCursor = resolver.query(Phone.CONTENT_URI, null, Phone.CONTACT_ID + "=?", new String[] { id }, null);
+                if (phoneCursor.moveToFirst()) {
+                    phone = phoneCursor.getString(phoneCursor.getColumnIndex(Phone.NUMBER));
+                }
+
+                Cursor emailCursor = resolver.query(Email.CONTENT_URI, null, Email.CONTACT_ID + "=?", new String[]{id}, null);
+                if (emailCursor.moveToFirst()) {
+                    email = emailCursor.getString(emailCursor.getColumnIndex(Email.ADDRESS));
+                }
+
+                String message = "name: " + name + "\r\nemail: " + email + "\r\nphone: " + phone;
+                new AlertDialog.Builder(this)
+                        .setTitle(name)
+                        .setMessage(message)
+                        .setPositiveButton("ok", null)
+                        .show();
+
+                final Toast notifier = Toast.makeText(this, name + ", email: " + email + ", phone: " + phone, Toast.LENGTH_LONG);
+                notifier.show();
+                new CountDownTimer(9000, 1000)
+                {
+                    public void onTick(long millisUntilFinished) {notifier.show();}
+                    public void onFinish() {notifier.show();
+                    }
+                }.start();
+            }
+        }
     }
 
 }
