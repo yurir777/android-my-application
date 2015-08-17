@@ -21,10 +21,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.Collator;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MyActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -43,8 +47,9 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
     private Boolean contactLoaded = false;
     private Boolean phoneLoaded = false;
     private Boolean emailLoaded = false;
-
     private HashMap<String, String> contactData = new HashMap<>(3);
+    private ArrayList<String> contactItems;
+    private ArrayAdapter<String> contactsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,10 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
         if (ab != null) {
             ab.setDisplayShowHomeEnabled(true);
         }
+        contactItems = new ArrayList();
+        contactsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contactItems);
+        ListView contactsList = (ListView)findViewById(R.id.contactsList);
+        contactsList.setAdapter(contactsAdapter);
     }
 
     @Override
@@ -155,7 +164,7 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
         }
     }
 
-    private void NotifyUser() {
+    private void UpdateContactsList() {
         String name = contactData.get(NAME_KEY);
         String email = contactData.get(EMAIL_KEY);
         String phone = contactData.get(PHONE_KEY);
@@ -177,6 +186,12 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
             public void onFinish() {notifier.show();
             }
         }.start();
+
+        // Add contact to contacts list
+        if (contactsAdapter.getPosition(name) < 0) {
+            contactsAdapter.add(name);
+            contactsAdapter.sort(Collator.getInstance());
+        }
     }
 
     // LoaderManager.LoaderCallbacks implementation
@@ -232,8 +247,9 @@ public class MyActivity extends Activity implements LoaderManager.LoaderCallback
                 break;
         }
 
-        if (contactLoaded && phoneLoaded && emailLoaded)
-            NotifyUser();
+        if (contactLoaded && phoneLoaded && emailLoaded) {
+            UpdateContactsList();
+        }
     }
 
     @Override

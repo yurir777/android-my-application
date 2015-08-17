@@ -29,4 +29,8 @@
         android:text="@string/button_addContact"
         android:onClick="addContact"/>
 
+    <ListView android:id="@+id/contactsList"
+        android:layout_below="@id/addContact"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"/>
 </RelativeLayout>
