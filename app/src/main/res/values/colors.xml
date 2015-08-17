@@ -2,4 +2,5 @@
 <resources>
     <color name="actionbar_background">#ffffc200</color>
     <color name="actionbar_text">#9d1f9c0d</color>
+    <color name="selected_contact_background">@android:color/darker_gray</color>
 </resources>

@@ -32,5 +32,8 @@
     <ListView android:id="@+id/contactsList"
         android:layout_below="@id/addContact"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        android:choiceMode="singleChoice"
+        android:listSelector="@color/selected_contact_background"
+        />
 </RelativeLayout>
